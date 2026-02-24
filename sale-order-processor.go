@@ -37,11 +37,21 @@ func SaleOrderProcessor(orderItems []string) float64 {
 		isSale, product := CheckForSale(string(item))
 		if isSale == true {
 			productPrice[product] = productPrice[product] * 0.9
-			fmt.Printf("you get a 10 percent discount for %v \n", product)
 			totalDiscountPrice += productPrice[product]
 		}
 		totalDiscountPrice += productPrice[item]
 	}
 
 	return totalDiscountPrice
+}
+
+func DataCollation() [][]string{
+	data := [][]string{
+		{"Products", "Initial Price", "Discounted Price"},
+		{""}, 
+	}
+}
+
+func TableConstructor(data []string) string{
+
 }
