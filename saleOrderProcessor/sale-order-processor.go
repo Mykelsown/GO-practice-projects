@@ -85,9 +85,15 @@ func SaleOrderProcessor(orderItems []string) float64 {
 //--------AI MODIFICATION------- 
 func TextSlicer(t []string) []string {
 	refined := make([]string, len(t))
+
 	for i, el := range t {
-		refined[i] = strings.TrimSuffix(el, "_SALE")
+		if strings.HasSuffix(el, "_SALE") {
+			refined[i] = el[:len(el)-5]
+		} else {
+			refined[i] = el
+		}
 	}
+
 	return refined
 }
 
