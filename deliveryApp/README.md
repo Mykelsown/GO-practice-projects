@@ -147,16 +147,6 @@ go-mock-delivery-app/
 
 ---
 
-## Possible Extensions
-
-- [ ] Split into multiple packages (`payment`, `delivery`, `notification`)
-- [ ] Add error handling to interface methods
-- [ ] Persist orders using a database or JSON file
-- [ ] Build a REST API layer on top of the checkout system
-- [ ] Write unit tests for each interface implementation
-
----
-
 ## Author
 
 Built as a personal Go learning project — feel free to fork and extend it!
