@@ -133,6 +133,8 @@ call.Checkout(order)
 - **Methods** — attaching behaviour to types using receiver functions
 - **Composition** — building `CheckoutSystem` by composing multiple interfaces rather than inheriting
 - **Single-package structuring** — organising types and logic clearly within one `main` package
+- **Type-safe duck typing** — no type explicitly declares that it implements an interface; Go's compiler infers satisfaction automatically from method signatures. If `PayWithCard` has a `Pay(float64) string` method, it is a `PaymentProcessor` — no declaration needed. If the signature is wrong or missing, the program fails to compile. This gives you the flexibility of duck typing with the safety of static type checking, and this project demonstrates it across all three interfaces and their nine total implementations.
+
 
 ---
 
