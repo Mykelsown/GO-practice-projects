@@ -15,7 +15,7 @@ type Dog struct {
 
 type Cat struct {
 	Name        string
-	Type      string
+	Indoor      bool
 	AdoptionFee float64
 }
 
@@ -38,11 +38,15 @@ func (c Cat) Fee() float64 {
 
 // +++++++++++++++++ STRINGER ===========================
 func (d Dog) String() string {
-	return fmt.Sprintf("Cheapest dog: DOG: %s (%s) - $%.2f", d.Name, d.Breed, d.AdoptionFee)
+	return fmt.Sprintf("DOG: %s (%s) - $%.2f", d.Name, d.Breed, d.AdoptionFee)
 }
 
 func (c Cat) String() string {
-	return fmt.Sprintf("Cheapest cat: CAT: %s [%v] - $%.2f", c.Name, c.Type, c.AdoptionFee)
+	location := "Outdoor"
+	if c.Indoor{
+		location = "Indoor"
+	}
+	return fmt.Sprintf("CAT: %s [%v] - $%.2f", c.Name, location, c.AdoptionFee)
 }
 
 func Cheapest[T Animal](animals []T) T {
@@ -74,19 +78,19 @@ func main() {
 	//+++++++++++++++++++++ CATS
 	cat1 := Cat{
 		Name:        "Whiskers",
-		Type:      "Indoor",
+		Indoor:        false,
 		AdoptionFee: 64.34,
 	}
 	cat2 := Cat{
 		Name:        "Scream",
-		Type:      "Outdoor",
+		Indoor:        true,
 		AdoptionFee: 105.68,
 	}
 	cats := []Cat{cat2, cat1}
 
 	// mixed := []Animal{dog1, cat1}
-	fmt.Println(Cheapest(dogs))
-	fmt.Println(Cheapest(cats))
+	fmt.Println("Cheapest dog: ", Cheapest(dogs))
+	fmt.Println("Cheapest cat: ", Cheapest(cats))
 	// fmt.Println(Cheapest(mixed))
 
 }
