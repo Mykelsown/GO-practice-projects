@@ -15,6 +15,7 @@ type BaseAccount struct {
 // Methods
 func (base *BaseAccount) Deposit(amount float64) {
 	base.Balance += amount
+	fmt.Printf("Deposited %.2f successfully\n", amount)
 }
 
 func (base *BaseAccount) Withdraw(amount float64) error {
@@ -128,16 +129,20 @@ func main() {
 		GasFee: 332,
 	}
 
-	cards:=[]DebitCard{card1, card2}
-	wallets := []CryptoWallet{wallet1, wallet2}
+	cards:=[]*DebitCard{&card1, &card2}
+	wallets := []*CryptoWallet{&wallet1, &wallet2}
 
 	// ====
 	fmt.Println(card2.Send(20000))
 	card1.Deposit(250000)
-	fmt.Println(card1)
-	fmt.Println(card2)
+
 	
 	fmt.Println("Richest debit card: ", Richest(cards))
+
+	// ---++++++++++----------- Divider
+	fmt.Println("")
+	fmt.Println("==============================================================")
+	fmt.Println("")
 	
 	// -----
 	fmt.Println(wallet2.Send(32234))
