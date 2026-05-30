@@ -1,4 +1,4 @@
-package paymentprocessingsystem
+package main
 
 import (
 	"errors"
@@ -19,9 +19,9 @@ func (base *BaseAccount) Deposit(amount float64) {
 
 func (base *BaseAccount) Withdraw(amount float64) error {
 	if base.Balance < amount {
-		return errors.New("insufficient funds")
+		return errors.New("Send failed: insufficient funds")
 	}
-	return nil
+	return fmt.Errorf("Withdrawal succesful")
 }
 
 
@@ -41,24 +41,24 @@ type CryptoWallet struct {
 // Custumize the type Debitcard & CryptoWallet output
 func (card DebitCard) String() string {
 	lastFour := card.CardNumber[len(card.CardNumber)-4:]
-	return fmt.Sprintf( "DebitCard [**** %s] Owner: %s | Balance: $%.2f | Daily limit: $%.2f", lastFour, card.Owner, card.Balance, card.DailyLimit)
+	return fmt.Sprintf( "DebitCard [****%s] Owner: %s | Balance: $%.2f | Daily limit: $%.2f", lastFour, card.Owner, card.Balance, card.DailyLimit)
 }
 
 func (wallet CryptoWallet) String() string {
 	lastFour := wallet.WalletAddress[len(wallet.WalletAddress)-4:]
-	return fmt.Sprintf( "WalletAddress [**** %s] Owner: %s | Balance: $%.2f | Network Fee: $%.2f", lastFour, wallet.Owner, wallet.Balance, wallet.GasFee)
+	return fmt.Sprintf( "WalletAddress [****%s] Owner: %s | Balance: $%.2f | Network Fee: $%.2f", lastFour, wallet.Owner, wallet.Balance, wallet.GasFee)
 }
 
-// Payment contract
-type PaymentInstruction interface {
+// Payment contract: valid for any type that implements the type(s) in it.
+type PaymentInstrument interface {
 	Send(amount float64) error
 	AvailableBalance() float64
 }
 
-// Exposing DebitCard to PaymeentInstruction 
+// Exposing DebitCard to PaymeentInstrument 
 func (card DebitCard) Send(amount float64) error {
 	if amount > card.DailyLimit {
-		return errors.New("daily limit exceeded")
+		return errors.New("Send failed: amount exceeds daily limit")
 	}
 	return card.Withdraw(amount)
 }
@@ -67,9 +67,9 @@ func (card DebitCard) AvailableBalance() float64 {
 	return card.Balance
 }
 
-// Exposing CryptoWallet to PaymeentInstruction 
+// Exposing CryptoWallet to PaymeentInstrument 
 func (wallet CryptoWallet) Send(amount float64) error {
-	amount += amount*0.03
+	amount += wallet.GasFee
 	return wallet.Withdraw(amount) 	
 }
 
@@ -77,4 +77,64 @@ func (wallet CryptoWallet) AvailableBalance() float64 {
 	return wallet.Balance
 }
 
+// Gives the user account with the highest balance
+func Richest[T PaymentInstrument](accounts []T) T{
+	highestAcc := accounts[0]
+	for _, account := range accounts {
+		if account.AvailableBalance() > highestAcc.AvailableBalance() {
+			highestAcc = account
+		}
+	}
+	return highestAcc
+}
+
+
+func main() {
+	// declaring instance of the types
+	// debit card
+	card1 := DebitCard{
+		BaseAccount: BaseAccount{
+			Owner: "Micheal",
+			Balance: 129000.00,
+		},
+		CardNumber: "5125122313246457",
+		DailyLimit: 20000.00,
+	}
+	card2 := DebitCard{
+		BaseAccount: BaseAccount{
+			Owner: "Sultan",
+			Balance: 332000.00,
+		},
+		CardNumber: "1642124100981276",
+		DailyLimit: 50000.00,
+	}
+
+	// crypto wallet
+	wallet1:= CryptoWallet{
+		BaseAccount: BaseAccount{
+			Owner: "Micheal",
+			Balance: 129000.00,
+		},
+		WalletAddress: "0x126her78dm",
+		GasFee: 129,
+	}
+	wallet2:= CryptoWallet{
+		BaseAccount: BaseAccount{
+			Owner: "Sultan",
+			Balance: 332000.00,
+		},
+		WalletAddress: "0c323him12pw",
+		GasFee: 332,
+	}
+
+	cards:=[]DebitCard{card1, card2}
+	wallets := []CryptoWallet{wallet1, wallet2}
+
+	fmt.Println(card1.Send(2000))
+	fmt.Println("Richest debit card: ", Richest(cards))
+	
+	fmt.Println(wallet2.Send(32234))
+	fmt.Println("Richest Crypto Wallet", Richest(wallets))
+
+}
 
