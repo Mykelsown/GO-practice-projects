@@ -82,7 +82,7 @@ func (wallet CryptoWallet) AvailableBalance() float64 {
 // Gives the user account with the highest balance
 func Richest[T PaymentInstrument](accounts []T) T{
 	highestAcc := accounts[0]
-	for _, account := range accounts {
+	for _, account := range accounts[1:] {
 		if account.AvailableBalance() > highestAcc.AvailableBalance() {
 			highestAcc = account
 		}
