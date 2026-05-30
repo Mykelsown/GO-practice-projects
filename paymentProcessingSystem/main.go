@@ -23,7 +23,7 @@ func (base *BaseAccount) Withdraw(amount float64) error {
 		return errors.New("Send failed: insufficient funds")
 	}
 	base.Balance -= amount
-	return fmt.Errorf("Withdrawal succesful")
+	return errors.New("Withdrawal succesful")
 }
 
 
