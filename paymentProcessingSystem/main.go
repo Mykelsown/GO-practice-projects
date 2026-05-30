@@ -23,9 +23,9 @@ func (base *BaseAccount) Withdraw(amount float64) error {
 		return errors.New("Send failed: insufficient funds")
 	}
 	base.Balance -= amount
-	return errors.New("Withdrawal succesful")
+	fmt.Println("Withdrawal Successful")
+	return nil
 }
-
 
 // Withdrawal Methods structure
 type DebitCard struct {
@@ -41,12 +41,12 @@ type CryptoWallet struct {
 }
 
 // Custumize the type Debitcard & CryptoWallet output
-func (card DebitCard) String() string {
+func (card *DebitCard) String() string {
 	lastFour := card.CardNumber[len(card.CardNumber)-4:]
 	return fmt.Sprintf( "DebitCard [****%s] Owner: %s | Balance: $%.2f | Daily limit: $%.2f", lastFour, card.Owner, card.Balance, card.DailyLimit)
 }
 
-func (wallet CryptoWallet) String() string {
+func (wallet *CryptoWallet) String() string {
 	lastFour := wallet.WalletAddress[len(wallet.WalletAddress)-4:]
 	return fmt.Sprintf( "WalletAddress [****%s] Owner: %s | Balance: $%.2f | Network Fee: $%.2f", lastFour, wallet.Owner, wallet.Balance, wallet.GasFee)
 }
@@ -65,7 +65,7 @@ func (card *DebitCard) Send(amount float64) error {
 	return card.Withdraw(amount)
 }
 
-func (card DebitCard) AvailableBalance() float64 {
+func (card *DebitCard) AvailableBalance() float64 {
 	return card.Balance
 }
 
@@ -75,15 +75,15 @@ func (wallet *CryptoWallet) Send(amount float64) error {
 	return wallet.Withdraw(amount) 	
 }
 
-func (wallet CryptoWallet) AvailableBalance() float64 {
+func (wallet *CryptoWallet) AvailableBalance() float64 {
 	return wallet.Balance
 }
 
 // Gives the user account with the highest balance
 func Richest[T PaymentInstrument](accounts []T) T{
-	highestAcc := accounts[0]
-	for _, account := range accounts[1:] {
-		if account.AvailableBalance() > highestAcc.AvailableBalance() {
+	highestAcc := accounts[0] // Takes the very first account in the slice as the account with the highest balance
+	for _, account := range accounts[1:] { // skipping the very first element in the slice, since we already have it stored in a variable before
+		if account.AvailableBalance() > highestAcc.AvailableBalance() {// This helps to compare the initial we set to other account in the slice
 			highestAcc = account
 		}
 	}
@@ -133,15 +133,16 @@ func main() {
 	wallets := []*CryptoWallet{&wallet1, &wallet2}
 
 	// ====
+	fmt.Println("======================== Debit Card Transaction ======================================")
 	fmt.Println(card2.Send(20000))
 	card1.Deposit(250000)
 
 	
 	fmt.Println("Richest debit card: ", Richest(cards))
 
-	// ---++++++++++----------- Divider
+	// +++++++++
 	fmt.Println("")
-	fmt.Println("==============================================================")
+	fmt.Println("======================== Crypto Wallet Transaction ======================================")
 	fmt.Println("")
 	
 	// -----
