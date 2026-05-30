@@ -57,7 +57,7 @@ type PaymentInstrument interface {
 	AvailableBalance() float64
 }
 
-// Exposing DebitCard to PaymeentInstrument 
+// DebitCard implements PaymeentInstrument 
 func (card *DebitCard) Send(amount float64) error {
 	if amount > card.DailyLimit {
 		return errors.New("Send failed: amount exceeds daily limit")
