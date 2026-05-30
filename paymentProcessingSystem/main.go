@@ -21,6 +21,7 @@ func (base *BaseAccount) Withdraw(amount float64) error {
 	if base.Balance < amount {
 		return errors.New("Send failed: insufficient funds")
 	}
+	base.Balance -= amount
 	return fmt.Errorf("Withdrawal succesful")
 }
 
@@ -56,7 +57,7 @@ type PaymentInstrument interface {
 }
 
 // Exposing DebitCard to PaymeentInstrument 
-func (card DebitCard) Send(amount float64) error {
+func (card *DebitCard) Send(amount float64) error {
 	if amount > card.DailyLimit {
 		return errors.New("Send failed: amount exceeds daily limit")
 	}
@@ -68,7 +69,7 @@ func (card DebitCard) AvailableBalance() float64 {
 }
 
 // Exposing CryptoWallet to PaymeentInstrument 
-func (wallet CryptoWallet) Send(amount float64) error {
+func (wallet *CryptoWallet) Send(amount float64) error {
 	amount += wallet.GasFee
 	return wallet.Withdraw(amount) 	
 }
@@ -130,11 +131,19 @@ func main() {
 	cards:=[]DebitCard{card1, card2}
 	wallets := []CryptoWallet{wallet1, wallet2}
 
-	fmt.Println(card1.Send(2000))
+	// ====
+	fmt.Println(card2.Send(20000))
+	card1.Deposit(250000)
+	fmt.Println(card1)
+	fmt.Println(card2)
+	
 	fmt.Println("Richest debit card: ", Richest(cards))
 	
+	// -----
 	fmt.Println(wallet2.Send(32234))
-	fmt.Println("Richest Crypto Wallet", Richest(wallets))
+	wallet1.Deposit(150000)
+	
+	fmt.Println("Richest Crypto Wallet: ", Richest(wallets))
 
 }
 
