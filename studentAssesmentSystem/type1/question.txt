@@ -1,0 +1,229 @@
+Practice Question: EdTech Student Assessment System
+
+You have been hired to build the core logic for an EdTech platform called LearnSphere.
+Sr
+The platform manages students, instructors, courses, and assessment reports.
+
+Requirements
+1. Custom Types and Structs
+
+Create custom types and structs for:
+
+StudentID
+CourseCode
+Grade
+
+Create the following structs:
+
+Student
+Instructor
+Course
+Assessment
+
+Each student can have multiple assessments.
+
+2. Methods and Receivers
+
+Implement methods for:
+
+AddAssessment()
+CalculateAverage()
+IsPassed()
+
+Use appropriate receiver types.
+
+Example:
+
+student.CalculateAverage()
+3. Interfaces
+
+Create an interface:
+
+type Reportable interface {
+    GenerateReport() string
+}
+
+Both:
+
+Student
+Course
+
+must implement this interface.
+
+4. Stringer Interface
+
+Implement the fmt.Stringer interface for:
+
+Student
+Assessment
+
+When printed using:
+
+fmt.Println(student)
+
+it should display a nicely formatted summary.
+
+Example output:
+
+Student: Samuel
+ID: STU001
+Average Score: 82.5
+5. Generics
+
+Create a generic function:
+
+FindTop[T any](items []T, scoreFunc func(T) float64) T
+
+This function should return:
+
+Top student
+Top assessment
+Top course
+
+depending on what slice is passed.
+
+6. Composition and Embedding
+
+Create a base struct:
+
+Person
+
+containing:
+
+Name
+Email
+
+Then embed it into:
+
+Student
+Instructor
+
+so that both inherit common behavior.
+
+7. Formatting Strings
+
+Generate professional report strings using:
+
+fmt.Sprintf()
+
+Example:
+
+Course: Go Programming
+Students: 25
+Average Grade: 78.4%
+8. Working with Unicode Characters
+
+Students may have names containing Unicode characters:
+
+José
+李明
+Ọlámidé
+
+Create a function that correctly counts the number of characters in a student's name.
+
+Example:
+
+CountCharacters(name string)
+
+The function must work correctly with Unicode.
+
+9. Regular Expressions
+
+Validate:
+
+Student IDs
+
+Format:
+
+STU001
+STU245
+STU999
+Emails
+
+Format:
+
+student@example.com
+
+Create functions:
+
+ValidateStudentID()
+ValidateEmail()
+
+using regex.
+
+10. Templates
+
+Use Go templates (text/template or html/template) to generate a student performance report.
+
+Example output:
+
+========================
+STUDENT REPORT
+========================
+
+Name: Samuel
+Course: Go Programming
+
+Assessments:
+- Quiz 1 : 85
+- Quiz 2 : 90
+
+Average: 87.5
+Status: Passed
+Bonus Challenges
+Bonus 1
+
+Create a generic repository:
+
+Repository[T any]
+
+with methods:
+
+Add()
+GetAll()
+Find()
+Bonus 2
+
+Create an interface:
+
+Notifier
+
+and implementations:
+
+EmailNotifier
+SMSNotifier
+
+to notify students when they pass or fail.
+
+Bonus 3
+
+Use composition to create:
+
+OnlineCourse
+
+that embeds:
+
+Course
+
+and adds:
+
+MeetingLink
+Platform
+Expected Learning Outcomes
+
+After completing this project, you should be comfortable with:
+
+Custom types
+Structs
+Methods & receivers
+Interfaces
+Stringer
+Generics
+Embedding & composition
+String formatting
+Unicode handling
+Regex validation
+Templates
+Basic software design in Go
+
+This is very close to the kind of mini-project you might be given in a Go backend interview or a real EdTech startup code assessment.
