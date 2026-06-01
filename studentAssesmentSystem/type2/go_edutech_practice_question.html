@@ -1,0 +1,368 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.root { padding: 1.5rem 0; font-family: var(--font-sans); color: var(--color-text-primary); }
+.title { font-size: 20px; font-weight: 500; margin-bottom: 0.6rem; }
+.badges { margin-bottom: 1rem; }
+.badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: var(--border-radius-md); margin-right: 6px; margin-bottom: 6px; }
+.b-blue { background: var(--color-background-info); color: var(--color-text-info); }
+.b-green { background: var(--color-background-success); color: var(--color-text-success); }
+.section-label { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.07em; margin: 1.4rem 0 0.55rem; }
+.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.4rem; margin-bottom: 0.9rem; font-size: 15px; line-height: 1.8; }
+.req-item { display: flex; gap: 10px; align-items: flex-start; padding: 9px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 14.5px; line-height: 1.75; }
+.req-item:last-child { border-bottom: none; padding-bottom: 0; }
+.num { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); white-space: nowrap; margin-top: 3px; }
+.num-blue { background: var(--color-background-info); color: var(--color-text-info); }
+.num-green { background: var(--color-background-success); color: var(--color-text-success); }
+code { font-family: var(--font-mono); font-size: 12.5px; background: var(--color-background-secondary); padding: 1px 6px; border-radius: 4px; }
+.output-box { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; }
+.out-label { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 10px; }
+.output-box pre { font-family: var(--font-mono); font-size: 12.5px; line-height: 1.85; color: var(--color-text-primary); white-space: pre; overflow-x: auto; }
+.actions { display: flex; gap: 10px; margin-top: 1.25rem; flex-wrap: wrap; }
+.hint-box { border-left: 3px solid var(--color-border-info); padding: 0.9rem 1.1rem; margin-top: 1rem; font-size: 13.5px; color: var(--color-text-secondary); line-height: 1.85; border-radius: 0; display: none; }
+.sol-box { display: none; margin-top: 1rem; }
+.sol-box pre { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 1rem 1.2rem; font-family: var(--font-mono); font-size: 12.5px; line-height: 1.8; overflow-x: auto; white-space: pre; color: var(--color-text-primary); }
+.pre-label { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; margin-top: 1rem; }
+.topic-map { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 8px; margin-bottom: 0.9rem; }
+.topic-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 8px 12px; font-size: 12.5px; color: var(--color-text-secondary); line-height: 1.5; }
+.topic-card strong { font-weight: 500; color: var(--color-text-primary); display: block; margin-bottom: 2px; font-size: 13px; }
+</style>
+
+<div class="root">
+<h2 class="sr-only">High-level Go practice question for an edutech student report and certificate system</h2>
+
+<div class="title">Student Report &amp; Certificate Engine 🎓</div>
+
+<div class="badges">
+  <span class="badge b-blue">Structs</span>
+  <span class="badge b-blue">Methods &amp; receivers</span>
+  <span class="badge b-blue">Interfaces</span>
+  <span class="badge b-blue">Stringer</span>
+  <span class="badge b-blue">Generics</span>
+  <span class="badge b-blue">Embedding</span>
+  <span class="badge b-green">Formatting strings</span>
+  <span class="badge b-green">Unicode</span>
+  <span class="badge b-green">Regex</span>
+  <span class="badge b-green">text/template</span>
+</div>
+
+<div class="section-label">Scenario</div>
+<div class="card">
+  You are building the reporting engine for an online learning platform. The platform has two types of learners — <strong style="font-weight:500">students</strong> and <strong style="font-weight:500">teaching assistants (TAs)</strong> — who share common profile data but have different scoring logic. Your engine must validate their profiles, calculate grades, find the top performer, and render a formatted certificate for them using a Go template.
+</div>
+
+<div class="section-label">Topic map</div>
+<div class="topic-map">
+  <div class="topic-card"><strong>Embedding</strong>BaseProfile inside Student &amp; TA</div>
+  <div class="topic-card"><strong>Stringer</strong>Formatted profile output</div>
+  <div class="topic-card"><strong>Interface</strong>Learner — Grade() &amp; Progress()</div>
+  <div class="topic-card"><strong>Generics</strong>TopPerformer[T Learner]</div>
+  <div class="topic-card"><strong>Regex</strong>Validate email &amp; student ID</div>
+  <div class="topic-card"><strong>Unicode</strong>Grade badge symbols</div>
+  <div class="topic-card"><strong>fmt formatting</strong>Aligned columnar report</div>
+  <div class="topic-card"><strong>text/template</strong>Render graduation certificate</div>
+</div>
+
+<div class="section-label">Requirements</div>
+<div class="card" style="padding-top:0.4rem; padding-bottom:0.4rem;">
+
+  <div class="req-item">
+    <span class="num num-blue">1</span>
+    <span>Define a <code>BaseProfile</code> struct with <code>Name string</code>, <code>Email string</code>, and <code>EnrollmentID string</code>. Give it a method <code>Validate() error</code> that uses <strong style="font-weight:500">regex</strong> to check that the email matches a standard email pattern and the <code>EnrollmentID</code> matches the pattern <code>EDU-[0-9]{4}</code> (e.g. <code>EDU-2047</code>). Return a descriptive error if either fails.</span>
+  </div>
+
+  <div class="req-item">
+    <span class="num num-blue">2</span>
+    <span>Define a <code>Student</code> struct that <strong style="font-weight:500">embeds</strong> <code>BaseProfile</code> and adds <code>Scores []float64</code> and <code>Course string</code>. Define a <code>TeachingAssistant</code> struct that also embeds <code>BaseProfile</code> and adds <code>Scores []float64</code>, <code>Course string</code>, and <code>SessionsLed int</code>. A TA's overall progress gets a <code>+5.0</code> bonus for each session led, capped at 100.</span>
+  </div>
+
+  <div class="req-item">
+    <span class="num num-blue">3</span>
+    <span>Implement <code>fmt.Stringer</code> on both types. Use <strong style="font-weight:500">fmt formatting verbs</strong> to produce a neatly padded, aligned output. Example:<br><code>"[ EDU-2047 ]  Amara Osei           · Go Programming   · ▓▓▓▓▓▓░░  78.5%"</code><br>The progress bar is made of <strong style="font-weight:500">Unicode block characters</strong> <code>▓</code> and <code>░</code> across 8 slots, filled proportionally to the score.</span>
+  </div>
+
+  <div class="req-item">
+    <span class="num num-blue">4</span>
+    <span>Define a <code>Learner</code> interface with <code>Progress() float64</code> and <code>Grade() string</code>. <code>Progress()</code> returns the average of <code>Scores</code> (plus the TA bonus). <code>Grade()</code> returns a Unicode badge based on the average: <code>A → 🏅</code>, <code>B → ⭐</code>, <code>C → ✅</code>, <code>D → ⚠️</code>, <code>F → ❌</code>. Implement both on <code>Student</code> and <code>TeachingAssistant</code>.</span>
+  </div>
+
+  <div class="req-item">
+    <span class="num num-blue">5</span>
+    <span>Write a generic function <code>TopPerformer[T Learner](learners []T) T</code> that returns the learner with the highest <code>Progress()</code> score.</span>
+  </div>
+
+  <div class="req-item">
+    <span class="num num-green">6</span>
+    <span>Define a <code>text/template</code> that renders a graduation certificate. It should print the learner's name, course, grade badge, progress score, and a congratulatory message. Write a function <code>IssueCertificate(w io.Writer, l Learner, p BaseProfile)</code> that executes the template and writes the output to <code>w</code>.</span>
+  </div>
+
+  <div class="req-item">
+    <span class="num num-green">7</span>
+    <span>In <code>main</code>: create at least 2 students and 2 TAs. Validate each profile with <code>Validate()</code> — skip and print a warning for any that fail. Print all valid learners using <code>fmt.Println</code> (triggering <code>String()</code>). Use <code>TopPerformer</code> separately on the student and TA slices. Issue a certificate for each top performer to <code>os.Stdout</code>.</span>
+  </div>
+
+</div>
+
+<div class="section-label">Expected output (abbreviated)</div>
+<div class="output-box">
+  <div class="out-label">stdout</div>
+  <pre>⚠  Skipping invalid profile: email format invalid
+
+[ EDU-1021 ]  Amara Osei           · Go Programming   · ▓▓▓▓▓▓░░  74.5%
+[ EDU-2047 ]  Lena Fischer         · Go Programming   · ▓▓▓▓▓▓▓░  88.0%
+[ EDU-3310 ]  Kofi Mensah (TA)     · Data Structures  · ▓▓▓▓▓▓▓▓  95.0%  [+2 sessions]
+
+══════════════════════════════════════
+   🎓  CERTIFICATE OF COMPLETION
+══════════════════════════════════════
+  Recipient : Lena Fischer
+  Course    : Go Programming
+  Score     : 88.00%
+  Grade     : ⭐ (B)
+
+  Congratulations on completing the course!
+══════════════════════════════════════</pre>
+</div>
+
+<div class="actions">
+  <button onclick="toggleHint()"><i class="ti ti-bulb" aria-hidden="true"></i> Show hints</button>
+  <button onclick="toggleSolution()"><i class="ti ti-code" aria-hidden="true"></i> Show solution</button>
+</div>
+
+<div class="hint-box" id="hint-box">
+  <strong style="font-weight:500">Hints</strong><br>
+  • Import <code>regexp</code> and compile your patterns once with <code>regexp.MustCompile</code> at package level — not inside <code>Validate()</code> on every call.<br>
+  • For the progress bar: <code>filled := int(progress / 100 * 8)</code> gives you how many <code>▓</code> slots to print. Use <code>strings.Repeat</code>.<br>
+  • Unicode grade badges are just string literals — assign them directly: <code>case avg >= 90: return "🏅"</code>.<br>
+  • In <code>IssueCertificate</code>, define your template string with backticks and call <code>template.Must(template.New("cert").Parse(tmpl))</code>.<br>
+  • Pass a struct (e.g. <code>CertData</code>) into <code>tmpl.Execute(w, data)</code> with the fields your template references — templates access fields by name.<br>
+  • The <code>%-20s</code> verb left-pads a string to 20 characters — useful for the aligned <code>String()</code> output.<br>
+  • <code>TeachingAssistant.Progress()</code> needs <code>math.Min(avg + float64(ta.SessionsLed)*5, 100)</code> to enforce the cap.
+</div>
+
+<div class="sol-box" id="sol-box">
+  <div class="pre-label">solution</div>
+  <pre>package main
+
+import (
+	"errors"
+	"fmt"
+	"io"
+	"math"
+	"os"
+	"regexp"
+	"strings"
+	"text/template"
+)
+
+// ── Compiled regex patterns (package level — compiled once) ──────────
+var (
+	emailRegex = regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)
+	idRegex    = regexp.MustCompile(`^EDU-[0-9]{4}$`)
+)
+
+// ── BaseProfile ──────────────────────────────────────────────────────
+type BaseProfile struct {
+	Name         string
+	Email        string
+	EnrollmentID string
+}
+
+// Validate checks email and enrollment ID format with regex
+func (b BaseProfile) Validate() error {
+	if !emailRegex.MatchString(b.Email) {
+		return errors.New("email format invalid")
+	}
+	if !idRegex.MatchString(b.EnrollmentID) {
+		return errors.New("enrollment ID must match EDU-XXXX")
+	}
+	return nil
+}
+
+// ── Embedded structs ─────────────────────────────────────────────────
+type Student struct {
+	BaseProfile
+	Course string
+	Scores []float64
+}
+
+type TeachingAssistant struct {
+	BaseProfile
+	Course      string
+	Scores      []float64
+	SessionsLed int
+}
+
+// ── Learner interface ────────────────────────────────────────────────
+type Learner interface {
+	Progress() float64
+	Grade() string
+}
+
+// ── Progress and Grade for Student ──────────────────────────────────
+func (s Student) Progress() float64 {
+	var total float64
+	for _, score := range s.Scores {
+		total += score
+	}
+	return total / float64(len(s.Scores))
+}
+
+func (s Student) Grade() string { return gradeBadge(s.Progress()) }
+
+// ── Progress and Grade for TeachingAssistant ─────────────────────────
+func (ta TeachingAssistant) Progress() float64 {
+	var total float64
+	for _, score := range ta.Scores {
+		total += score
+	}
+	avg := total / float64(len(ta.Scores))
+	// +5 bonus per session led, capped at 100
+	return math.Min(avg+float64(ta.SessionsLed)*5.0, 100)
+}
+
+func (ta TeachingAssistant) Grade() string { return gradeBadge(ta.Progress()) }
+
+// gradeBadge maps a score to a Unicode grade badge
+func gradeBadge(score float64) string {
+	switch {
+	case score >= 90:
+		return "🏅 (A)"
+	case score >= 80:
+		return "⭐ (B)"
+	case score >= 70:
+		return "✅ (C)"
+	case score >= 60:
+		return "⚠️  (D)"
+	default:
+		return "❌ (F)"
+	}
+}
+
+// progressBar builds a Unicode block bar across 8 slots
+func progressBar(progress float64) string {
+	filled := int(progress / 100 * 8)
+	return strings.Repeat("▓", filled) + strings.Repeat("░", 8-filled)
+}
+
+// ── Stringer ─────────────────────────────────────────────────────────
+func (s Student) String() string {
+	return fmt.Sprintf("[ %-9s ]  %-20s · %-16s · %s  %.1f%%",
+		s.EnrollmentID, s.Name, s.Course,
+		progressBar(s.Progress()), s.Progress())
+}
+
+func (ta TeachingAssistant) String() string {
+	return fmt.Sprintf("[ %-9s ]  %-20s · %-16s · %s  %.1f%%  [+%d sessions]",
+		ta.EnrollmentID, ta.Name+"(TA)", ta.Course,
+		progressBar(ta.Progress()), ta.Progress(), ta.SessionsLed)
+}
+
+// ── Generic TopPerformer ─────────────────────────────────────────────
+func TopPerformer[T Learner](learners []T) T {
+	top := learners[0]
+	for _, l := range learners[1:] {
+		if l.Progress() > top.Progress() {
+			top = l
+		}
+	}
+	return top
+}
+
+// ── Certificate template ─────────────────────────────────────────────
+var certTemplate = template.Must(template.New("cert").Parse(`
+══════════════════════════════════════
+   🎓  CERTIFICATE OF COMPLETION
+══════════════════════════════════════
+  Recipient : {{.Name}}
+  Course    : {{.Course}}
+  Score     : {{printf "%.2f" .Score}}%
+  Grade     : {{.Grade}}
+
+  Congratulations on completing the course!
+══════════════════════════════════════
+`))
+
+type CertData struct {
+	Name   string
+	Course string
+	Score  float64
+	Grade  string
+}
+
+// IssueCertificate renders the certificate template to the given writer
+func IssueCertificate(w io.Writer, name, course string, l Learner) {
+	data := CertData{
+		Name:   name,
+		Course: course,
+		Score:  l.Progress(),
+		Grade:  l.Grade(),
+	}
+	certTemplate.Execute(w, data)
+}
+
+// ── Main ─────────────────────────────────────────────────────────────
+func main() {
+	students := []Student{
+		{BaseProfile: BaseProfile{"Amara Osei", "amara@edu.com", "EDU-1021"}, Course: "Go Programming", Scores: []float64{70, 75, 78}},
+		{BaseProfile: BaseProfile{"Lena Fischer", "lena@edu.com", "EDU-2047"}, Course: "Go Programming", Scores: []float64{85, 90, 89}},
+		{BaseProfile: BaseProfile{"Invalid User", "not-an-email", "EDU-9999"}, Course: "Go Programming", Scores: []float64{60}},
+	}
+
+	tas := []TeachingAssistant{
+		{BaseProfile: BaseProfile{"Kofi Mensah", "kofi@edu.com", "EDU-3310"}, Course: "Data Structures", Scores: []float64{82, 88, 85}, SessionsLed: 2},
+		{BaseProfile: BaseProfile{"Yuki Tanaka", "yuki@edu.com", "EDU-4401"}, Course: "Data Structures", Scores: []float64{70, 72, 68}, SessionsLed: 1},
+	}
+
+	// Validate and print students
+	var validStudents []Student
+	for _, s := range students {
+		if err := s.Validate(); err != nil {
+			fmt.Printf("⚠  Skipping invalid profile: %s\n", err)
+			continue
+		}
+		validStudents = append(validStudents, s)
+		fmt.Println(s)
+	}
+
+	// Validate and print TAs
+	var validTAs []TeachingAssistant
+	for _, ta := range tas {
+		if err := ta.Validate(); err != nil {
+			fmt.Printf("⚠  Skipping invalid profile: %s\n", err)
+			continue
+		}
+		validTAs = append(validTAs, ta)
+		fmt.Println(ta)
+	}
+
+	// Issue certificates for top performers
+	topStudent := TopPerformer(validStudents)
+	topTA := TopPerformer(validTAs)
+
+	IssueCertificate(os.Stdout, topStudent.Name, topStudent.Course, topStudent)
+	IssueCertificate(os.Stdout, topTA.Name, topTA.Course, topTA)
+}</pre>
+</div>
+</div>
+
+<script>
+function toggleHint() {
+  const box = document.getElementById('hint-box');
+  const btn = document.querySelectorAll('button')[0];
+  const shown = box.style.display === 'block';
+  box.style.display = shown ? 'none' : 'block';
+  btn.innerHTML = shown
+    ? '<i class="ti ti-bulb" aria-hidden="true"></i> Show hints'
+    : '<i class="ti ti-bulb-off" aria-hidden="true"></i> Hide hints';
+}
+function toggleSolution() {
+  const box = document.getElementById('sol-box');
+  const btn = document.querySelectorAll('button')[1];
+  const shown = box.style.display === 'block';
+  box.style.display = shown ? 'none' : 'block';
+  btn.innerHTML = shown
+    ? '<i class="ti ti-code" aria-hidden="true"></i> Show solution'
+    : '<i class="ti ti-code-off" aria-hidden="true"></i> Hide solution';
+}
+</script>
