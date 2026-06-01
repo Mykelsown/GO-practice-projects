@@ -1,0 +1,67 @@
+Student Report & Certificate Engine 🎓
+Structs Methods & receivers Interfaces Stringer Generics Embedding Formatting strings Unicode Regex text/template
+Scenario
+You are building the reporting engine for an online learning platform. The platform has two types of learners — students and teaching assistants (TAs) — who share common profile data but have different scoring logic. Your engine must validate their profiles, calculate grades, find the top performer, and render a formatted certificate for them using a Go template.
+Topic map
+Embedding
+BaseProfile inside Student & TA
+Stringer
+Formatted profile output
+Interface
+Learner — Grade() & Progress()
+Generics
+TopPerformer[T Learner]
+Regex
+Validate email & student ID
+Unicode
+Grade badge symbols
+fmt formatting
+Aligned columnar report
+text/template
+Render graduation certificate
+Requirements
+1
+Define a BaseProfile struct with Name string, Email string, and EnrollmentID string. Give it a method Validate() error that uses regex to check that the email matches a standard email pattern and the EnrollmentID matches the pattern EDU-[0-9]{4} (e.g. EDU-2047). Return a descriptive error if either fails.
+2
+Define a Student struct that embeds BaseProfile and adds Scores []float64 and Course string. Define a TeachingAssistant struct that also embeds BaseProfile and adds Scores []float64, Course string, and SessionsLed int. A TA's overall progress gets a +5.0 bonus for each session led, capped at 100.
+3
+Implement fmt.Stringer on both types. Use fmt formatting verbs to produce a neatly padded, aligned output. Example:
+"[ EDU-2047 ] Amara Osei · Go Programming · ▓▓▓▓▓▓░░ 78.5%"
+The progress bar is made of Unicode block characters ▓ and ░ across 8 slots, filled proportionally to the score.
+4
+Define a Learner interface with Progress() float64 and Grade() string. Progress() returns the average of Scores (plus the TA bonus). Grade() returns a Unicode badge based on the average: A → 🏅, B → ⭐, C → ✅, D → ⚠️, F → ❌. Implement both on Student and TeachingAssistant.
+5
+Write a generic function TopPerformer[T Learner](learners []T) T that returns the learner with the highest Progress() score.
+6
+Define a text/template that renders a graduation certificate. It should print the learner's name, course, grade badge, progress score, and a congratulatory message. Write a function IssueCertificate(w io.Writer, l Learner, p BaseProfile) that executes the template and writes the output to w.
+7
+In main: create at least 2 students and 2 TAs. Validate each profile with Validate() — skip and print a warning for any that fail. Print all valid learners using fmt.Println (triggering String()). Use TopPerformer separately on the student and TA slices. Issue a certificate for each top performer to os.Stdout.
+Expected output (abbreviated)
+stdout
+⚠  Skipping invalid profile: email format invalid
+
+[ EDU-1021 ]  Amara Osei           · Go Programming   · ▓▓▓▓▓▓░░  74.5%
+[ EDU-2047 ]  Lena Fischer         · Go Programming   · ▓▓▓▓▓▓▓░  88.0%
+[ EDU-3310 ]  Kofi Mensah (TA)     · Data Structures  · ▓▓▓▓▓▓▓▓  95.0%  [+2 sessions]
+
+══════════════════════════════════════
+   🎓  CERTIFICATE OF COMPLETION
+══════════════════════════════════════
+  Recipient : Lena Fischer
+  Course    : Go Programming
+  Score     : 88.00%
+  Grade     : ⭐ (B)
+
+  Congratulations on completing the course!
+══════════════════════════════════════
+
+
+This is a significant step up from the previous two questions. A few things to think about before you start writing:
+New things to figure out:
+
+regexp.MustCompile should be called at package level, not inside Validate(). If you compile the regex inside the function, it recompiles on every single call — wasteful. Package-level means it compiles once at startup.
+For text/template, you pass a data struct into Execute — the template accesses its fields by name with {{.FieldName}}. Think about what data your certificate needs and define that struct first before writing the template string.
+The Unicode progress bar (▓░) is just strings.Repeat — figure out how to calculate how many filled slots to show from a percentage out of 8.
+
+The hardest part will be IssueCertificate — it takes an io.Writer and a Learner interface, but your template also needs Name and Course which aren't on the Learner interface. Think carefully about how to bridge that gap without breaking the interface design.
+Good luck!
