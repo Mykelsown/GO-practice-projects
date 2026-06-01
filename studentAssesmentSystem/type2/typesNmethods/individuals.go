@@ -17,6 +17,9 @@ type TeachingAssistant struct {
 
 // Formatting types outputs
 func (std Student) String() string {
-	return fmt.Sprintf("[ %s ] Amara Osei · Go Programming · ▓▓▓▓▓▓░░ 78.5%", std.EnrollmentID, std.Name, )
+	return fmt.Sprintf("[ %s ] %s · %s · ▓▓▓▓▓▓▓▓░░ %.1f%", std.EnrollmentID, std.Name, std.Course, std.Scores )
 }
 
+func barCreator(score []float64) string {
+	
+}
