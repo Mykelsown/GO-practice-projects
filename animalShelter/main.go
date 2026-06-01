@@ -52,7 +52,7 @@ func (c Cat) String() string {
 func Cheapest[T Animal](animals []T) T {
 	lowest := animals[0].Fee()
 	cheapestAnimal := animals[0]
-	for _, animal := range animals {
+	for _, animal := range animals[1:] {
 		if animal.Fee() <= lowest {
 			lowest = animal.Fee()
 			cheapestAnimal = animal
