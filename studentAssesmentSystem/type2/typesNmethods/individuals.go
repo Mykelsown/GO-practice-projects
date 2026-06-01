@@ -1,6 +1,9 @@
 package type2
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type Student struct {
 	BaseProfile
@@ -17,9 +20,27 @@ type TeachingAssistant struct {
 
 // Formatting types outputs
 func (std Student) String() string {
-	return fmt.Sprintf("[ %s ] %s · %s · ▓▓▓▓▓▓▓▓░░ %.1f%", std.EnrollmentID, std.Name, std.Course, std.Scores )
+	bar, percent := progressBar(std.Scores)
+	return fmt.Sprintf("[ %s ] %s · %s · %s %.1f%", std.EnrollmentID, std.Name, std.Course, bar, percent)
 }
 
-func barCreator(score []float64) string {
-	
+func progressBar(score []float64) (string, float64) {
+	bar := "░░░░░░░░░░"
+	numScore := len(score) - 1
+	totalScore := 0.0
+	for _, scr := range score {
+		if scr > 100.00 {
+			scr = 100
+		}
+		totalScore += scr
+	}
+
+	scorePercent := totalScore / float64(numScore)
+	repeatBarCount := int(scorePercent) / 10
+	if scorePercent < 10 {
+		repeatBarCount = 1
+	}
+	bar = strings.Replace(bar, "░", "▓", repeatBarCount)
+
+	return bar, scorePercent
 }
