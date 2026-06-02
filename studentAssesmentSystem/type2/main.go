@@ -2,6 +2,7 @@ package main
 
 import (
 	type2 "SAS/type2/typesNmethods"
+	"fmt"
 )
 
 func main() {
@@ -28,7 +29,7 @@ func main() {
 	TA1 := type2.TeachingAssistant{
 		BaseProfile: type2.BaseProfile{
 			Name:         "Ezekiel Leke",
-			Email:        "Lekezziel@gmail.com",
+			Email:        "Lekezzielgmail.com",
 			EnrollmentID: "EDU-2500",
 		},
 		Scores: []float64{88.5, 95, 60, 56.4, 90.2},
@@ -49,11 +50,41 @@ func main() {
 
 	Students := []type2.Student{student1, student2}
 	TAs := []type2.TeachingAssistant{TA1, TA2}
-	
+	for _, e := range Students{
+		displayLegitimate(e)
+	}
+	for _, e := range TAs{
+		displayLegitimate(e)
+	}
+
+	// ---------stuent1 Data Render Section------
+	_, score := student1.Progress()
+	st1Data := type2.DisplayData{
+		Receipent: student1.Name,
+		Course: student1.Course,
+		Score: score,
+		Grade: student1.Grade(),
+	}
+	type2.Render(st1Data)
 }
 
-func displayLegitimate[T type2.Student|type2.TeachingAssistant](learners []T) {
-	for _, learner := range learners {
-		
+func displayLegitimate(learner any) { 
+	switch j := learner.(type) {
+	case type2.Student :
+		real := learner.(type2.Student)
+		if real.Validate() != nil {
+			fmt.Printf("⚠  Skipping invalid profile: %s\n\n", real.Validate())
+			break
+		}
+		fmt.Println(real, "\n")
+	case type2.TeachingAssistant :
+		real := learner.(type2.TeachingAssistant)
+		if real.Validate() != nil {
+			fmt.Printf("⚠  Skipping invalid profile: %s\n\n", real.Validate())
+			break
+		}
+		fmt.Println(real, "\n")		
+	default:
+		fmt.Printf("Wrong type passed: %T", j)
 	}
 }

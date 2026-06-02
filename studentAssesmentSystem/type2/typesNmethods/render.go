@@ -13,7 +13,7 @@ type DisplayData struct {
 	Grade string
 }
 
-func render(data any) {
+func Render(data any) {
 	message := `
 ══════════════════════════════════════
    🎓  CERTIFICATE OF COMPLETION
