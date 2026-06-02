@@ -92,17 +92,17 @@ func (std Student) Grade() string {
 	badge := ""
 	switch {
 	case percent >= 85.0:
-		badge = "🏅"
+		badge = "🏅 (A)"
 	case percent >= 70.0:
-		badge = "⭐"
+		badge = "⭐ (B)"
 	case percent >= 55.0:
-		badge = "✅"
+		badge = "✅ (C)"
 	case percent >= 40.0:
-		badge = "⚠️"
+		badge = "⚠️ (D)"
 	case percent < 40.0:
-		badge = "❌"
+		badge = "❌ (F)"
 	default:
-		badge = "???"
+		badge = "!!!"
 	}
 
 	return badge
