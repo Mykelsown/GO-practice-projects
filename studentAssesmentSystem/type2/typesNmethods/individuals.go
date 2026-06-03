@@ -26,12 +26,12 @@ type TeachingAssistant struct {
 // Formatting types outputs
 func (std Student) String() string {
 	bar, percent := std.Progress()
-	return fmt.Sprintf("[ %s ] %s · %s · %s %.1f%", std.EnrollmentID, std.Name, std.Course, bar, percent)
+	return fmt.Sprintf("[ %s ] %s · %s · %s %.1f%%", std.EnrollmentID, std.Name, std.Course, bar, percent)
 }
 
 func (TA TeachingAssistant) String() string {
 	bar, percent := TA.Progress()
-	return fmt.Sprintf("[ %s ] %s · %s · %s %.1f% [+%d sessions]", TA.EnrollmentID, TA.Name, TA.Course, bar, percent, TA.SessionLed)
+	return fmt.Sprintf("[ %s ] %s · %s · %s %.1f%% [+%d sessions]", TA.EnrollmentID, TA.Name, TA.Course, bar, percent, TA.SessionLed)
 }
 
 // Exposing Student and TeachingAAssistant to Learner
@@ -57,16 +57,6 @@ func (std Student) Progress() (string, float64) {
 }
 
 func (TA TeachingAssistant) Progress() (string, float64) {
-	bonusScore := 0
-	for i := TA.SessionLed; i > 0; i-- {
-		bonusScore += 5
-		if bonusScore == 100 {
-			break
-		}
-	}
-
-	TA.Scores = append(TA.Scores, float64(bonusScore))
-
 	bar := "░░░░░░░░░░"
 	numScore := len(TA.Scores)
 	totalScore := 0.0
@@ -78,6 +68,14 @@ func (TA TeachingAssistant) Progress() (string, float64) {
 	}
 
 	scorePercent := totalScore / float64(numScore)
+	for i := TA.SessionLed; i > 0; i-- {
+		scorePercent += 5.00
+		if scorePercent > 100 {
+			scorePercent = 100
+			break
+		}
+	}
+
 	repeatBarCount := int(scorePercent) / 10
 	if scorePercent < 10 {
 		repeatBarCount = 1
