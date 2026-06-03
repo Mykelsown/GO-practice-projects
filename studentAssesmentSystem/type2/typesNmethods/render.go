@@ -20,7 +20,7 @@ func Render(data any) {
 ══════════════════════════════════════
   Recipient : {{ .Receipent}}
   Course    : {{ .Course}}
-  Score     : {{ .Score}}%
+  Score     : {{printf "%.2f" .Score}}%
   Grade     : {{ .Grade}}
 
     Congratulations on completing the course!
@@ -34,7 +34,7 @@ func Render(data any) {
 
 func logError(err error) {
   if err != nil {
-	fmt.Errorf(err.Error())
+	fmt.Errorf("%s", err.Error())
 	os.Exit(1)
   }
 } 

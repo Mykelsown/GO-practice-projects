@@ -6,6 +6,7 @@ func TopPerformer[T Learner](learners []T) T {
 	for _, learner := range learners[1:] {
 		if _, score := learner.Progress(); score > initialHighestScore {
 			highestScorer = learner
+			initialHighestScore = score
 		}
 	}
 	return highestScorer

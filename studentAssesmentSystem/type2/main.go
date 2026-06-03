@@ -12,7 +12,7 @@ func main() {
 			Email:        "emmanuelsansai@gmail.com",
 			EnrollmentID: "EDU-2512",
 		},
-		Scores: []float64{72.7, 90.2, 67, 83.3, 75},
+		Scores: []float64{92.7, 90.2, 87, 83.3, 75},
 		Course: "Go Programming",
 	}
 
