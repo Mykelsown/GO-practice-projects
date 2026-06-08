@@ -100,5 +100,4 @@ Processing 6 log files concurrently...
 - Add a `workerPool` pattern: instead of one goroutine per file, limit to N workers using a semaphore channel.
 - Add a context with timeout — cancel all goroutines if total processing exceeds 2 seconds.
 - Write results to a file using `os.WriteFile` instead of printing to stdout.
-- Count total lines across all successful files and include it in the summary.
  
