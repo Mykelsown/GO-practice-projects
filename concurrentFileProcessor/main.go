@@ -27,11 +27,22 @@ func main() {
 	for val := range bufChan {
 		if val.HasError {
 			failures = append(failures, val)
+			continue
 		}
 		successes = append(successes, val)
+
 	}
 
-	
+	for _, success := range successes{
+		name, numOfLine := success.FileName, success.LineCount
+		fmt.Printf("✔  %s        — %d lines\n", name, numOfLine)
+	}
 
-	fmt.Println()
+	for _, failure := range failures{
+		name, errMsg := failure.FileName, failure.ErrorMsg
+		fmt.Printf("✗  %s        — %s lines\n", name, errMsg)
+	}
+
+	processed := len(successes) + len(failures)
+	fmt.Printf("========================\nFiles Processed : %d\nSucceeded : %d\nFailed : %d\n========================\n", processed, len(successes), len(failures))
 }
