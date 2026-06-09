@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	fileLogs := []string{"Data.txt", "Network.txt", "Running.txt", "Clean-error.txt", "Append.txt", "Query-error.txt"}
+	fileLogs := []string{"Data.txt", "Network-error.txt", "Running.txt", "Clean-error.txt", "Append.txt", "Query-error.txt"}
 	bufChan := make(chan MTR.LogResult, len(fileLogs)) // Helps strore certain amount of data, regardless if there's a receiver to collect or not.
 	var wg sync.WaitGroup
 

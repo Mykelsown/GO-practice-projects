@@ -1,14 +1,15 @@
 package MTR
 
 import (
-	"math"
 	"math/rand"
 	"strings"
 	"time"
 )
 
+var rndSeed = rand.New(rand.NewSource(int64(time.Now().Second())))
+
 func ProcessLog(filename string) LogResult {
-	time.Sleep(500)
+	time.Sleep(time.Duration(rand.Intn(400)+100) * time.Microsecond)
 
 	if strings.Contains(filename, "error") {
 		errMsg := "failed to parse " + filename + ": critical error detected"
@@ -20,10 +21,10 @@ func ProcessLog(filename string) LogResult {
 		}
 	}
 
-	count := math.Max(100, float64(rand.Intn(1000)))
+	count := rndSeed.Intn(900) + 100
 	return LogResult{
 		FileName:  filename,
-		LineCount: int(count),
+		LineCount: count,
 		HasError:  false,
 		ErrorMsg:  "",
 	}
