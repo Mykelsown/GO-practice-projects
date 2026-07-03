@@ -1,19 +1,15 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 func main() {
 	// a := 1
 	// add(&a)
 	// fmt.Println(a)
-	brainFuck()
-}
-
-func add(a *int) *int {
-	z := 5
-	y := &z
-	*a = *a * *y
-	return a
+	brainFuck(os.Args[1])
 }
 
 func brainFuck(code string) {
@@ -24,17 +20,20 @@ func brainFuck(code string) {
 		'>': 0,
 		'<': 0,
 	}
+	position := 0
 	for _, c := range code {
-
 		switch c {
 		case '>':
 			movementCount[c]++
-			pointBytes[movementCount[c]] = *reference
+			position = movementCount[c]
+			pointBytes[position] = *reference
 		case '<':
 			movementCount[c]--
-			pointBytes[movementCount[c]] = *reference
+			position = movementCount[c]
+			pointBytes[position] = *reference
 		case '+':
-			fmt.Print()
+			pointBytes[position] = *reference
+			pointBytes[position]++
 		case '-':
 			fmt.Print()
 		case '.':
@@ -47,6 +46,6 @@ func brainFuck(code string) {
 			fmt.Println("foreign operator is present in the code string")
 		}
 	}
-
 	fmt.Println(pointBytes)
+
 }
