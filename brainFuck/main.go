@@ -17,8 +17,9 @@ func add(a *int) *int {
 }
 
 func brainFuck(code string) {
-	pointBytes := [2048]byte{}
-	reference := 
+	allBytes := [2048]byte{}
+	reference := &allBytes[0]
+	pointBytes := allBytes[1:]
 	movementCount := map[rune]int{
 		'>': 0,
 		'<': 0,
@@ -27,10 +28,11 @@ func brainFuck(code string) {
 
 		switch c {
 		case '>':
-			ind := movementCount[c]+1
-			pointBytes[ind] = 
+			movementCount[c]++
+			pointBytes[movementCount[c]] = *reference
 		case '<':
-			
+			movementCount[c]--
+			pointBytes[movementCount[c]] = *reference
 		case '+':
 			fmt.Print()
 		case '-':
