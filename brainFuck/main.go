@@ -18,6 +18,8 @@ func brainFuck(code string) {
 	reference := &allBytes[0]
 	pointBytes := allBytes[1:]
 	movementCount := 0
+	out := ""
+
 	for _, c := range code {
 		switch c {
 		case '>':
@@ -35,7 +37,7 @@ func brainFuck(code string) {
 			*reference--
 			println(*reference, "m")
 		case '.':
-			fmt.Print()
+			out += string(*reference)
 		case '[':
 			fmt.Print()
 		case ']':
@@ -44,6 +46,6 @@ func brainFuck(code string) {
 			fmt.Println("foreign operator is present in the code string")
 		}
 	}
-	fmt.Println(len(pointBytes))
-
+	fmt.Println(*reference)
+	fmt.Println(out)
 }
