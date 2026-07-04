@@ -6,8 +6,9 @@ import (
 )
 
 func main() {
-	// a := 1
-	// add(&a)
+	// a := []int{0, 1, 2, 3, 4, 5}
+	// b := &a[0]
+	// *b = 10
 	// fmt.Println(a)
 	brainFuck(os.Args[1])
 }
@@ -16,26 +17,23 @@ func brainFuck(code string) {
 	allBytes := [2048]byte{}
 	reference := &allBytes[0]
 	pointBytes := allBytes[1:]
-	movementCount := map[rune]int{
-		'>': 0,
-		'<': 0,
-	}
-	position := 0
+	movementCount := 0
 	for _, c := range code {
 		switch c {
 		case '>':
-			movementCount[c]++
-			position = movementCount[c]
-			pointBytes[position] = *reference
+			movementCount++
+			pointBytes[movementCount] = *reference
+			fmt.Println(pointBytes[movementCount], "up")
 		case '<':
-			movementCount[c]--
-			position = movementCount[c]
-			pointBytes[position] = *reference
+			movementCount--
+			pointBytes[movementCount] = *reference
+			fmt.Println(pointBytes[movementCount], "down")
 		case '+':
-			pointBytes[position] = *reference
-			pointBytes[position]++
+			*reference++
+			println(*reference, "a")
 		case '-':
-			fmt.Print()
+			*reference--
+			println(*reference, "m")
 		case '.':
 			fmt.Print()
 		case '[':
@@ -46,6 +44,6 @@ func brainFuck(code string) {
 			fmt.Println("foreign operator is present in the code string")
 		}
 	}
-	fmt.Println(pointBytes)
+	fmt.Println(len(pointBytes))
 
 }
