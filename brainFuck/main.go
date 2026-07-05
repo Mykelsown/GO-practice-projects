@@ -2,15 +2,24 @@ package main
 
 import (
 	"fmt"
-	"os"
+	// "os"
 )
 
 func main() {
-	// a := []int{0, 1, 2, 3, 4, 5}
+	a := []int{0, 1, 2, 3, 4, 5}
 	// b := &a[0]
 	// *b = 10
+	i := 0
+	count := 0
+	for i = 0; i < len(a); i++{
+		if a[i] == 2 && count < 5 {
+			i = 0
+			count++
+		}
+		fmt.Println(i)
+	}
 	// fmt.Println(a)
-	brainFuck(os.Args[1])
+	// brainFuck(os.Args[1])
 }
 
 func brainFuck(code string) {
@@ -19,8 +28,19 @@ func brainFuck(code string) {
 	pointBytes := allBytes[1:]
 	movementCount := 0
 	out := ""
+	
+	var(
+		ffCommand bool
+		revCommand bool
+	)
 
 	for _, c := range code {
+		if ffCommand && revCommand {
+			continue
+		} else if ffCommand && c == ']' {
+			ffCommand = false
+		}
+			
 		switch c {
 		case '>':
 			movementCount++
@@ -39,9 +59,13 @@ func brainFuck(code string) {
 		case '.':
 			out += string(*reference)
 		case '[':
-			fmt.Print()
+			if pointBytes[movementCount] == 0{
+				ffCommand = true
+			}
 		case ']':
-			fmt.Print()
+			if pointBytes[movementCount] == 0{
+				revCommand = true
+			}
 		default:
 			fmt.Println("foreign operator is present in the code string")
 		}
