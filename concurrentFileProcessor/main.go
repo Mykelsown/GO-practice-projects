@@ -33,14 +33,14 @@ func main() {
 
 	}
 
-	for _, success := range successes{
+	for _, success := range successes {
 		name, numOfLine := success.FileName, success.LineCount
 		fmt.Printf("✔  %s        — %d lines\n", name, numOfLine)
 	}
 
-	for _, failure := range failures{
+	for _, failure := range failures {
 		name, errMsg := failure.FileName, failure.ErrorMsg
-		fmt.Printf("✗  %s        — %s lines\n", name, errMsg)
+		fmt.Printf("✗  %s        — %s\n", name, errMsg)
 	}
 
 	processed := len(successes) + len(failures)

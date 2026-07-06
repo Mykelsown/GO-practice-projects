@@ -34,7 +34,7 @@ func Render(data any) {
 
 func logError(err error) {
   if err != nil {
-	fmt.Errorf("%s", err.Error())
+	fmt.Fprintln(os.Stdout, "error:", err)
 	os.Exit(1)
   }
 } 
