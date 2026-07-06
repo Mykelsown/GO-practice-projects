@@ -21,9 +21,10 @@ func main() {
 }
 
 func brainFuck(code string) {
-	allBytes := [2048]byte{}
-	reference := &allBytes[0]
+	allBytes := [2047]*byte{}
+	var reference byte = 0
 	pointBytes := allBytes[1:]
+	pointBytes[0] = &reference
 	movementCount := 0
 	out := ""
 	
@@ -36,55 +37,60 @@ func brainFuck(code string) {
 	openBracketPosition = append(openBracketPosition, 0)
 	OBC := 0
 
-	i := 0
+	var i int
 	for i = 0 ; i < len(code); i++ {
 		// For the backtracking logic
 		if revCommand {
-			i = openBracketPosition[OBC] + 1
+			i = openBracketPosition[OBC]
 			revCommand = false
 			OBC--
+			continue
 		}
-			
+
+		// The condition helps satisfy the criteria for skipping all operators until it gets to ] operator
+		if ffCommand && code[i] != ']' {
+			continue
+		} else if ffCommand && code[i]== ']' {
+			ffCommand = false
+			continue
+		}
+		
 		switch code[i]{
 		case '>':
 			movementCount++
-			pointBytes[movementCount] = *reference
-			fmt.Println(pointBytes[movementCount], "up")
+			pointBytes[movementCount] = &reference
+			fmt.Println(*pointBytes[movementCount], "up")
 		case '<':
 			movementCount--
-			pointBytes[movementCount] = *reference
-			fmt.Println(pointBytes[movementCount], "down")
+			pointBytes[movementCount] = &reference
+			fmt.Println(*pointBytes[movementCount], "down")
 		case '+':
-			*reference++
-			println(*reference, "a")
+			*pointBytes[movementCount]++
+			fmt.Println(reference, "a")
 		case '-':
-			*reference--
-			println(*reference, "m")
+			*pointBytes[movementCount]--
+			fmt.Println(reference, "m")
 		case '.':
-			out += string(*reference)
-			*reference = 0
+			out += string(reference)
+			fmt.Println(out, "out")
+			reference = 0
 		case '[':
-			if pointBytes[movementCount] == 0{
+			if *pointBytes[movementCount] == 0{
 				ffCommand = true
-				openBracketPosition = append(openBracketPosition, i)
-				OBC++
 			}
+			openBracketPosition = append(openBracketPosition, i)
+			OBC++
+			fmt.Println(OBC, "Obcccc")
 		case ']':
-			if pointBytes[movementCount] != 0{
+			if *pointBytes[movementCount] != 0{
+				fmt.Println(openBracketPosition, "obc")
 				revCommand = true
 			}
 		default:
 			fmt.Println("foreign operator is present in the code string")
 		}
 
-		// The condition helps satisfy the criteria for skipping all operators until it gets to ] operator
-		if ffCommand {
-			continue
-		} else if ffCommand && code[i]== ']' {
-			ffCommand = false
-			continue
-		}
+		
 	}
-	fmt.Println(*reference)
-	fmt.Println(out)
+	// fmt.Println(*reference)
 }
