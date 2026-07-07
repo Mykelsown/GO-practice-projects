@@ -21,10 +21,10 @@ func main() {
 }
 
 func brainFuck(code string) {
-	allBytes := [2047]*byte{}
-	var reference byte = 0
-	pointBytes := allBytes[1:]
-	pointBytes[0] = &reference
+	allBytes := [2048]byte{}
+	reference := allBytes[0]
+	// pointBytes := allBytes[1:]
+	// pointBytes[0] = &reference
 	movementCount := 0
 	out := ""
 	
@@ -63,13 +63,14 @@ func brainFuck(code string) {
 		case '<':
 			movementCount--
 			pointBytes[movementCount] = &reference
-			fmt.Println(*pointBytes[movementCount], "down")
+			fmt.Println(movementCount, "down")
 		case '+':
 			*pointBytes[movementCount]++
 			fmt.Println(reference, "a")
 		case '-':
+			
 			*pointBytes[movementCount]--
-			fmt.Println(reference, "m")
+			fmt.Println(reference, "m ", movementCount)
 		case '.':
 			out += string(reference)
 			fmt.Println(out, "out")
@@ -78,12 +79,12 @@ func brainFuck(code string) {
 			if *pointBytes[movementCount] == 0{
 				ffCommand = true
 			}
-			openBracketPosition = append(openBracketPosition, i)
+			openBracketPosition = append(openBracketPosition, i+1)
 			OBC++
-			fmt.Println(OBC, "Obcccc")
+			fmt.Println(openBracketPosition, "Obcccc")
 		case ']':
 			if *pointBytes[movementCount] != 0{
-				fmt.Println(openBracketPosition, "obc")
+				// fmt.Println(openBracketPosition, "obc")
 				revCommand = true
 			}
 		default:
