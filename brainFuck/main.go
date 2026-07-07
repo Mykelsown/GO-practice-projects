@@ -22,8 +22,8 @@ func main() {
 
 func brainFuck(code string) {
 	allBytes := [2048]byte{}
-	reference := allBytes[0]
-	// pointBytes := allBytes[1:]
+	var reference *byte = &allBytes[0]
+	pointBytes := allBytes[1:]
 	// pointBytes[0] = &reference
 	movementCount := 0
 	out := ""
@@ -58,32 +58,33 @@ func brainFuck(code string) {
 		switch code[i]{
 		case '>':
 			movementCount++
-			pointBytes[movementCount] = &reference
-			fmt.Println(*pointBytes[movementCount], "up")
+			pointBytes[movementCount] += *reference
+			fmt.Println(pointBytes[movementCount], "up")
 		case '<':
 			movementCount--
-			pointBytes[movementCount] = &reference
+			// pointBytes[movementCount] = *reference
 			fmt.Println(movementCount, "down")
 		case '+':
-			*pointBytes[movementCount]++
-			fmt.Println(reference, "a")
+			*reference++
+			// pointBytes[movementCount]++
+			fmt.Println(*reference, "a")
 		case '-':
-			
-			*pointBytes[movementCount]--
-			fmt.Println(reference, "m ", movementCount)
+			*reference--
+			// pointBytes[movementCount]--
+			fmt.Println(*reference, "m ", movementCount)
 		case '.':
-			out += string(reference)
+			out += string(*reference)
 			fmt.Println(out, "out")
-			reference = 0
+			*reference = 0
 		case '[':
-			if *pointBytes[movementCount] == 0{
+			if pointBytes[movementCount] == 0{
 				ffCommand = true
 			}
 			openBracketPosition = append(openBracketPosition, i+1)
 			OBC++
 			fmt.Println(openBracketPosition, "Obcccc")
 		case ']':
-			if *pointBytes[movementCount] != 0{
+			if pointBytes[movementCount] != 0{
 				// fmt.Println(openBracketPosition, "obc")
 				revCommand = true
 			}
