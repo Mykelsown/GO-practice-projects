@@ -6,93 +6,54 @@ import (
 )
 
 func main() {
-	// a := []int{0, 1, 2, 3, 4, 5}
-	// i := 0
-	// count := 0
-	// for i = 0; i < len(a); i++{
-	// 	if a[i] == 2 && count < 5 {
-	// 		i = 0
-	// 		count++
-	// 	}
-	// 	fmt.Println(i)
-	// }
-
-	brainFuck(os.Args[1])
+	code := ""
+	if len(os.Args) > 1 {
+		code = os.Args[1]
+	}
+	brainFuck(code)
 }
 
 func brainFuck(code string) {
-	allBytes := [2048]byte{}
-	var reference *byte = &allBytes[0]
-	pointBytes := allBytes[1:]
-	// pointBytes[0] = &reference
-	movementCount := 0
-	out := ""
 	
-	var(
-		ffCommand bool
-		revCommand bool
-	)
-
-	openBracketPosition := make([]int, 0)
-	openBracketPosition = append(openBracketPosition, 0)
-	OBC := 0
-
-	var i int
-	for i = 0 ; i < len(code); i++ {
-		// For the backtracking logic
-		if revCommand {
-			i = openBracketPosition[OBC]
-			revCommand = false
-			OBC--
-			continue
-		}
-
-		// The condition helps satisfy the criteria for skipping all operators until it gets to ] operator
-		if ffCommand && code[i] != ']' {
-			continue
-		} else if ffCommand && code[i]== ']' {
-			ffCommand = false
-			continue
-		}
-		
-		switch code[i]{
-		case '>':
-			movementCount++
-			pointBytes[movementCount] += *reference
-			fmt.Println(pointBytes[movementCount], "up")
-		case '<':
-			movementCount--
-			// pointBytes[movementCount] = *reference
-			fmt.Println(movementCount, "down")
-		case '+':
-			*reference++
-			// pointBytes[movementCount]++
-			fmt.Println(*reference, "a")
-		case '-':
-			*reference--
-			// pointBytes[movementCount]--
-			fmt.Println(*reference, "m ", movementCount)
-		case '.':
-			out += string(*reference)
-			fmt.Println(out, "out")
-			*reference = 0
+	jump := make([]int, len(code))
+	stack := make([]int, 0)
+	for i := 0; i < len(code); i++ {
+		switch code[i] {
 		case '[':
-			if pointBytes[movementCount] == 0{
-				ffCommand = true
-			}
-			openBracketPosition = append(openBracketPosition, i+1)
-			OBC++
-			fmt.Println(openBracketPosition, "Obcccc")
+			stack = append(stack, i)
 		case ']':
-			if pointBytes[movementCount] != 0{
-				// fmt.Println(openBracketPosition, "obc")
-				revCommand = true
-			}
-		default:
-			fmt.Println("foreign operator is present in the code string")
+			open := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			jump[open] = i
+			jump[i] = open
 		}
-
-		
 	}
-	// fmt.Println(*reference)
+
+	var tape [2048]byte
+	ptr := 0
+	out := make([]byte, 0)
+
+	for i := 0; i < len(code); i++ {
+		switch code[i] {
+		case '>':
+			ptr++
+		case '<':
+			ptr--
+		case '+':
+			tape[ptr]++
+		case '-':
+			tape[ptr]--
+		case '.':
+			out = append(out, tape[ptr])
+		case '[':
+			if tape[ptr] == 0 {
+				i = jump[i]
+			}
+		case ']':
+			if tape[ptr] != 0 {
+				i = jump[i]
+			}
+		}
+	}
+	fmt.Println(string(out))
 }
