@@ -13,9 +13,9 @@ func main() {
 	wg.Add(numOfJobs)
 
 	for job := range jobs {
-		res := ""
-		go work.CodeResolver(&wg, job)
-		fmt.Println(res)
+		var res <-chan string
+		res = work.CodeResolver(&wg, job)
+		fmt.Println(<-res)
 	}
 	
 	wg.Wait()

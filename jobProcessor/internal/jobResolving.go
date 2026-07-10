@@ -7,7 +7,7 @@ import (
 )
 
 // CodeResolver does the job i.e the workers: In this case the job is to convert a certain series of codes(operators), into a redadable alphabetical sentence(string).
-func CodeResolver(wg *sync.WaitGroup, job string) {
+func CodeResolver(wg *sync.WaitGroup, job string) <-chan string {
 	defer wg.Done()
 
 	finalizedChan := make(chan string)
@@ -16,7 +16,7 @@ func CodeResolver(wg *sync.WaitGroup, job string) {
 		close(finalizedChan)
 	}()
 	
-	<-finalizedChan
+	return finalizedChan
 }
 
 // translate is a tool for the workers. It a conversion tool specified for this job received
