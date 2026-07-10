@@ -7,8 +7,13 @@ import (
 
 
 func main() {
+	jobs, numOfJobs := internal.CodeProvider()
 	var wg sync.WaitGroup
-	wg.Add(1)
-	go internal.CodeResolver(&wg)
+	wg.Add(numOfJobs)
+
+	for job := range jobs {
+		go internal.CodeResolver(&wg, job, jobs)
+	}
+	
 	wg.Wait()
 }

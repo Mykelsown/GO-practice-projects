@@ -6,21 +6,15 @@ import (
 	"sync"
 )
 
-// codeResolver does the job i.e the workers: In this case the job is to convert a certain series of codes(operators), into a redadable alphabetical sentence(string). 
-func CodeResolver(wg *sync.WaitGroup) {
+// codeResolver does the job i.e the workers: In this case the job is to convert a certain series of codes(operators), into a redadable alphabetical sentence(string).
+func CodeResolver(wg *sync.WaitGroup, job string, jobs chan string) {
 	defer wg.Done()
 
-	jobs, numOfJobs := CodeProvider()
-	finalizedChan := make(chan string, numOfJobs)
-
-	for job := range jobs {
-		finalizedChan <- translate(job)
-	}
+	finalizedChan := make(chan string, len(jobs))
+	finalizedChan <- translate(job)
 	close(finalizedChan)
 
-	for finalized := range finalizedChan{
-		fmt.Println(finalized)
-	}
+	fmt.Println(<-finalizedChan)
 }
 
 // translate is a tool for the workers. It a conversion tool specified for this job received
@@ -47,7 +41,7 @@ func translate(codes string) string {
 		i int
 		res strings.Builder
 	)
-	
+
 	for i = 0; i < len(codes); i++{
 		switch codes[i] {
 		case '>':
