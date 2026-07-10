@@ -14,7 +14,7 @@ func main() {
 
 	for job := range jobs {
 		var res <-chan string
-		res = work.CodeResolver(&wg, job)
+		res = work.CodeResolver(&wg, job, numOfJobs)
 		fmt.Println(<-res)
 	}
 	

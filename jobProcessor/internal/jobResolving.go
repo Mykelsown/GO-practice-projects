@@ -7,13 +7,13 @@ import (
 )
 
 // CodeResolver does the job i.e the workers: In this case the job is to convert a certain series of codes(operators), into a redadable alphabetical sentence(string).
-func CodeResolver(wg *sync.WaitGroup, job string) <-chan string {
-	defer wg.Done()
-
-	finalizedChan := make(chan string)
+func CodeResolver(wg *sync.WaitGroup, job string, nWorkers int) <-chan string {
+	finalizedChan := make(chan string, nWorkers)
+	
 	go func(){
+		defer wg.Done()
 		finalizedChan <- translate(job)
-		close(finalizedChan)
+		// close(finalizedChan)
 	}()
 	
 	return finalizedChan
