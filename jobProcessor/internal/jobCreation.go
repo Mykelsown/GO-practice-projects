@@ -1,11 +1,8 @@
 package internal
 
-import (
-	"fmt"
-	"os"
-)
+import "os"
 
-func JobCreator() {
+func JobCreator() chan string {
 	codes := os.Args[1:]
 	jobs := make(chan string, len(codes))
 
@@ -14,7 +11,5 @@ func JobCreator() {
 	}
 	close(jobs)
 
-	for job := range jobs{
-		fmt.Println(job)
-	}
+	return jobs
 }

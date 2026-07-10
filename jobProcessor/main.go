@@ -1,7 +1,14 @@
 package main
 
-import "jobprocessor/internal"
+import (
+	"jobprocessor/internal"
+	"sync"
+)
+
 
 func main() {
-	internal.JobCreator()
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go internal.JobResolver(&wg)
+	wg.Wait()
 }
