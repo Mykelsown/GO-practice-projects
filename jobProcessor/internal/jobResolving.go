@@ -6,6 +6,7 @@ import (
 	"sync"
 )
 
+// codeResolver does the job i.e the workers: In this case the job is to convert a certain series of codes(operators), into a redadable alphabetical sentence(string). 
 func CodeResolver(wg *sync.WaitGroup) {
 	defer wg.Done()
 
@@ -22,6 +23,7 @@ func CodeResolver(wg *sync.WaitGroup) {
 	}
 }
 
+// translate is a tool for the workers. It a conversion tool specified for this job received
 func translate(codes string) string {
 	// Build of the backtracking and forwarding logic; acheived by just swapping the position of the corresponding open and close with each other, so that they can be target in the logic that does the manipulation of the string
 	positionSwapped := make([]int, len(codes))
@@ -45,6 +47,7 @@ func translate(codes string) string {
 		i int
 		res strings.Builder
 	)
+	
 	for i = 0; i < len(codes); i++{
 		switch codes[i] {
 		case '>':
