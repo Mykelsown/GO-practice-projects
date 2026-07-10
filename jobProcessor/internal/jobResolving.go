@@ -6,14 +6,14 @@ import (
 	"sync"
 )
 
-// codeResolver does the job i.e the workers: In this case the job is to convert a certain series of codes(operators), into a redadable alphabetical sentence(string).
-func CodeResolver(wg *sync.WaitGroup, job string, jobs chan string) {
+// CodeResolver does the job i.e the workers: In this case the job is to convert a certain series of codes(operators), into a redadable alphabetical sentence(string).
+func CodeResolver(wg *sync.WaitGroup, job string) {
 	defer wg.Done()
 
-	finalizedChan := make(chan string, len(jobs))
+	finalizedChan := make(chan string)
 	finalizedChan <- translate(job)
 	close(finalizedChan)
-
+	
 	fmt.Println(<-finalizedChan)
 }
 

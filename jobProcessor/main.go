@@ -12,7 +12,7 @@ func main() {
 	wg.Add(numOfJobs)
 
 	for job := range jobs {
-		go internal.CodeResolver(&wg, job, jobs)
+		go internal.CodeResolver(&wg, job)
 	}
 	
 	wg.Wait()
