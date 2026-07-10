@@ -1,7 +1,7 @@
-package internal
+package work
 
 import (
-	"fmt"
+	// "fmt"
 	"strings"
 	"sync"
 )
@@ -11,10 +11,12 @@ func CodeResolver(wg *sync.WaitGroup, job string) {
 	defer wg.Done()
 
 	finalizedChan := make(chan string)
-	finalizedChan <- translate(job)
-	close(finalizedChan)
+	go func(){
+		finalizedChan <- translate(job)
+		close(finalizedChan)
+	}()
 	
-	fmt.Println(<-finalizedChan)
+	<-finalizedChan
 }
 
 // translate is a tool for the workers. It a conversion tool specified for this job received

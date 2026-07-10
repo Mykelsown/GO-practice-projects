@@ -1,4 +1,4 @@
-package internal
+package work
 
 import "os"
 
@@ -9,9 +9,9 @@ func CodeProvider() (<-chan string, int) {
 	for _, code := range codes {
 		go func() {
 			jobs <- code
-			close(jobs)
+			// close(jobs)
 		}()
 	}
-
+		
 	return jobs, len(codes)
 }
