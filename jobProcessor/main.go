@@ -9,6 +9,6 @@ import (
 func main() {
 	var wg sync.WaitGroup
 	wg.Add(1)
-	go internal.JobResolver(&wg)
+	go internal.CodeResolver(&wg)
 	wg.Wait()
 }

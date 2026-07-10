@@ -2,7 +2,7 @@ package internal
 
 import "os"
 
-func JobCreator() chan string {
+func CodeProvider() (chan string, int) {
 	codes := os.Args[1:]
 	jobs := make(chan string, len(codes))
 
@@ -11,5 +11,5 @@ func JobCreator() chan string {
 	}
 	close(jobs)
 
-	return jobs
+	return jobs, len(codes)
 }
