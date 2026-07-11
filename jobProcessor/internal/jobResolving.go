@@ -11,6 +11,7 @@ func CodeResolver(jobs <-chan string, nWorkers int) <-chan string {
 	var wg sync.WaitGroup
 	wg.Add(nWorkers)
 	
+	// just the exact number of worker = number of goroutine to complete the job, regardless of the amount of jobs available.
 	for i := 1; i <= nWorkers; i++{
 		go func(){
 			defer wg.Done()
