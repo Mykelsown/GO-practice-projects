@@ -5,7 +5,8 @@ import (
 	"sync"
 )
 
-func CodeProvider() (<-chan string, int) {
+//CodeProvider creates job, and wait for a job to be solved before passing the next.
+func CodeProvider() <-chan string {
 	codes := os.Args[1:]
 	var wg sync.WaitGroup
 	wg.Add(len(codes))
@@ -21,5 +22,5 @@ func CodeProvider() (<-chan string, int) {
 		wg.Wait()
 		close(jobs)
 		
-	return jobs, len(codes)
+	return jobs
 }

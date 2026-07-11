@@ -5,28 +5,28 @@ import (
 	"sync"
 )
 
-// CodeResolver does the job i.e the workers: In this case the job is to convert a certain series of codes(operators), into a redadable alphabetical sentence(string).
+// CodeResolver is a pool of certain workers, that uses tools to complete specific jobs
 func CodeResolver(jobs <-chan string, nWorkers int) <-chan string {
-	finalizedChan := make(chan string, nWorkers)
+	finalizedJobs := make(chan string, nWorkers)
 	var wg sync.WaitGroup
-	wg.Add(nWorkers)
 	
 	for job := range jobs {
+		wg.Add(1)
 		go func(){
 			defer wg.Done()
-			finalizedChan <- translate(job)
+			finalizedJobs <- translate(job)
 		}()
 	} 
 
 	go func() {
 		wg.Wait()
-		close(finalizedChan)
+		close(finalizedJobs)
 	}()
 			
-	return finalizedChan
+	return finalizedJobs
 }
 
-// translate is a tool for the workers. It a conversion tool specified for this job received
+// translate is a tool for the workers. It a conversion tool designed to convert a certain series of codes(operators), into a redadable alphabetical sentence(string).
 func translate(codes string) string {
 	// Build of the backtracking and forwarding logic; acheived by just swapping the position of the corresponding open and close with each other, so that they can be target in the logic that does the manipulation of the string
 	positionSwapped := make([]int, len(codes))

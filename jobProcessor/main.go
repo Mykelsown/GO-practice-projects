@@ -2,21 +2,17 @@ package main
 
 import (
 	"fmt"
-	"jobprocessor/internal"
+	work "jobprocessor/internal"
 )
 
 
 func main() {
-	jobs, numOfJobs := work.CodeProvider()
+	jobs := work.CodeProvider()
 	
 	var results <-chan string
-	// for job := range jobs {
-		// fmt.Println(job, "main")
-		results = work.CodeResolver(jobs, numOfJobs)
-	// }
+	results = work.CodeResolver(jobs, 2)
 
 	for result := range results {
 		fmt.Print(result)
 	}
-	
 }
