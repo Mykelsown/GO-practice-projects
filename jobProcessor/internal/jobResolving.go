@@ -3,18 +3,16 @@ package work
 import (
 	"strings"
 	"sync"
-	"fmt"
 )
 
 // CodeResolver does the job i.e the workers: In this case the job is to convert a certain series of codes(operators), into a redadable alphabetical sentence(string).
-func CodeResolver(job string, nWorkers int) chan string {
+func CodeResolver(jobs <-chan string, nWorkers int) <-chan string {
 	finalizedChan := make(chan string, nWorkers)
 	var wg sync.WaitGroup
 	wg.Add(nWorkers)
 	
-	for i := 1; i <= nWorkers; i++ {
+	for job := range jobs {
 		go func(){
-			fmt.Println(job, "other ", nWorkers)
 			defer wg.Done()
 			finalizedChan <- translate(job)
 		}()
@@ -47,7 +45,7 @@ func translate(codes string) string {
 
 	// Logic that does the manipulation; convertion of the code string to a readable alphabetical string
 	var(
-		ptr [2048]byte
+		ptr [2048]byte // stores the bytes that prints each character if the full sentence
 		movementCount int
 		i int
 		res strings.Builder

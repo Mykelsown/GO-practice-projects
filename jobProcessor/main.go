@@ -9,14 +9,14 @@ import (
 func main() {
 	jobs, numOfJobs := work.CodeProvider()
 	
-	var results chan string
-	for job := range jobs {
-		fmt.Println(job, "main")
-		results = work.CodeResolver(job, numOfJobs)
-	}
+	var results <-chan string
+	// for job := range jobs {
+		// fmt.Println(job, "main")
+		results = work.CodeResolver(jobs, numOfJobs)
+	// }
 
 	for result := range results {
-		fmt.Println(result)
+		fmt.Print(result)
 	}
 	
 }
