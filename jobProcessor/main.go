@@ -3,20 +3,19 @@ package main
 import (
 	"fmt"
 	"jobprocessor/internal"
-	"sync"
 )
 
 
 func main() {
 	jobs, numOfJobs := work.CodeProvider()
-	var wg sync.WaitGroup
-	wg.Add(numOfJobs)
-
+	
+	var results chan string
 	for job := range jobs {
-		var res <-chan string
-		res = work.CodeResolver(&wg, job, numOfJobs)
-		fmt.Println(<-res)
+		results = work.CodeResolver(job, numOfJobs)
+	}
+
+	for result := range results {
+		fmt.Println(result)
 	}
 	
-	wg.Wait()
 }

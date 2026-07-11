@@ -1,21 +1,28 @@
 package work
 
 import (
-	// "fmt"
 	"strings"
 	"sync"
 )
 
 // CodeResolver does the job i.e the workers: In this case the job is to convert a certain series of codes(operators), into a redadable alphabetical sentence(string).
-func CodeResolver(wg *sync.WaitGroup, job string, nWorkers int) <-chan string {
+func CodeResolver(job string, nWorkers int) chan string {
 	finalizedChan := make(chan string, nWorkers)
+	var wg sync.WaitGroup
+	wg.Add(nWorkers)
 	
-	go func(){
-		defer wg.Done()
-		finalizedChan <- translate(job)
-		// close(finalizedChan)
+	for i := 1; i <= nWorkers; i++ {
+		go func(){
+			defer wg.Done()
+			finalizedChan <- translate(job)
+		}()
+	} 
+
+	go func() {
+		wg.Wait()
+		close(finalizedChan)
 	}()
-	
+			
 	return finalizedChan
 }
 
