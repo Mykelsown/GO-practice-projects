@@ -9,12 +9,14 @@ import (
 func CodeResolver(jobs <-chan string, nWorkers int) <-chan string {
 	finalizedJobs := make(chan string, nWorkers)
 	var wg sync.WaitGroup
+	wg.Add(nWorkers)
 	
-	for job := range jobs {
-		wg.Add(1)
+	for i := 1; i <= nWorkers; i++{
 		go func(){
 			defer wg.Done()
-			finalizedJobs <- translate(job)
+			for job := range jobs {
+				finalizedJobs <- translate(job)
+			}
 		}()
 	} 
 
@@ -26,7 +28,7 @@ func CodeResolver(jobs <-chan string, nWorkers int) <-chan string {
 	return finalizedJobs
 }
 
-// translate is a tool for the workers. It a conversion tool designed to convert a certain series of codes(operators), into a redadable alphabetical sentence(string).
+// translate is a tool for the workers. It a conversion tool designed to convert a certain series of codes(operators), into a readable alphabetical sentence(string).
 func translate(codes string) string {
 	// Build of the backtracking and forwarding logic; acheived by just swapping the position of the corresponding open and close with each other, so that they can be target in the logic that does the manipulation of the string
 	positionSwapped := make([]int, len(codes))
