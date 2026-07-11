@@ -11,6 +11,7 @@ func main() {
 	
 	var results chan string
 	for job := range jobs {
+		fmt.Println(job, "main")
 		results = work.CodeResolver(job, numOfJobs)
 	}
 

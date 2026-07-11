@@ -3,6 +3,7 @@ package work
 import (
 	"strings"
 	"sync"
+	"fmt"
 )
 
 // CodeResolver does the job i.e the workers: In this case the job is to convert a certain series of codes(operators), into a redadable alphabetical sentence(string).
@@ -13,6 +14,7 @@ func CodeResolver(job string, nWorkers int) chan string {
 	
 	for i := 1; i <= nWorkers; i++ {
 		go func(){
+			fmt.Println(job, "other ", nWorkers)
 			defer wg.Done()
 			finalizedChan <- translate(job)
 		}()
